@@ -5,7 +5,7 @@ link gốc: https://service.josephtran.xyz/testnet/zero-gravity-0g/0g-storage-no
 ## 1. Install dependencies for building from source
 ```bash
 sudo apt-get update
-sudo apt-get install clang cmake build-essential openssl pkg-config libssl-dev
+sudo apt-get install clang cmake build-essential openssl pkg-config libssl-dev jq
 ```
 ## 2. install go version 1.24.2
 ```bash
