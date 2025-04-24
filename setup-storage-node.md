@@ -49,6 +49,18 @@ log_config_file = "log_config"
 
 #Log directory.
 log_directory = "log"
+
+# transaction gas fee.
+miner_key = ""
+
+# RPC Config Options
+[rpc]
+
+# Whether to provide RPC service.
+ enabled = true
+
+# HTTP server address to bind for public RPC.
+ listen_address = "0.0.0.0:5678"
 ```
 ## 6. Set your miner key:
 Define varible
