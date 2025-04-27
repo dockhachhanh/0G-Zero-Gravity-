@@ -39,8 +39,9 @@ CHAINSCAN_API_KEY=abc
 ```
 - Thay <YOUR_PRIVATE_KEY> bằng private key của ví (bỏ 0x, ví dụ: private key của ví 0xE7dE245F746A43fE50Bf3dBE668D564372E82C5b).
 - CHAINSCAN_API_KEY để "abc" trừ khi chainscan yêu cầu key (liên hệ 0G Network qua Discord nếu cần).
-Cấu hình Hardhat:
-Mở file hardhat.config.js và thay bằng:
+  
+### Cấu hình Hardhat:
+Mở file ```hardhat.config.js``` và thay bằng:
 ```javascript
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-verify");
