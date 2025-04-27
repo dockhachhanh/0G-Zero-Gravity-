@@ -141,6 +141,10 @@ nano contracts/Lock.sol
 ```
 Xác nhận ```pragma solidity ^0.8.20 ```; nếu khác sửa cho đúng
 - Biên dịch lại hợp đồng.
+- kết quả:
+```
+Compiled 7 Solidity files successfully (evm target: istanbul).
+```
 ---
 ## Bước 3: Viết và chạy script triển khai
 Tạo script triển khai:
