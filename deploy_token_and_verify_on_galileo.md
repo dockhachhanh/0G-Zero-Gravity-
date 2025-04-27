@@ -214,6 +214,26 @@ Lưu địa chỉ hợp đồng 0xxxx....
 ```bash
 curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' https://evmrpc-testnet.0g.ai/
 ```
+---
+# Xác minh thủ công trên chainscan-galileo.0g.ai
+- Truy cập chainscan:chainscan-galileo.0g.ai.
+- Nhập địa chỉ hợp đồng ví dụ: 0x4E9E32e7C0B7E15Cf34397AF16fdb7f2E4bf666b
+- Chuyển đến tab Contract, nhấn Verify and Publish.
+- Điền thông tin xác minh:
+-- Contract Address: 0x4E9E32e7C0B7E15Cf34397AF16fdb7f2E4bf666b.
+-- Contract Name: MyToken.
+-- Compiler: 0.8.20.
+-- Optimization: Enabled, Runs = 200.
+-- EVM Version: istanbul.
+-- License: MIT.
+-- Contract Source Code: dán nội dung file Dán nội dung MyTokenFlattened.sol hoặc tải lên file
+### Tạo file flattened:
+```bash
+npx hardhat flatten contracts/MyToken.sol > MyTokenFlattened.sol
+```
+xác nhận verify
+Thông báo ``` Thành công ``` 
+---
 # CHÚC CÁC BẠN THÀNH CÔNG TRIỂN KHAI ĐƯỢC TOKEN CHO RIÊNG MÌNH
 
 
