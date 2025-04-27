@@ -151,7 +151,11 @@ Tạo script triển khai:
 ```bash
 mkdir scripts
 ```
-Tạo file ```bash nano deploy.js ``` với nội dung:
+Tạo file 
+```bash 
+nano deploy.js
+```
+với nội dung:
 ```javascript
 const hre = require("hardhat");
 
