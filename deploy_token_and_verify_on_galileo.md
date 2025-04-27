@@ -108,6 +108,10 @@ npm install --save-dev hardhat@latest
 ## Bước 2: Viết hợp đồng MyToken
 Tạo file hợp đồng:
 Trong thư mục contracts/, tạo file MyToken.sol:
+```bash
+nano contracts/MyToken.sol
+```
+nhập nội dung sau:
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
