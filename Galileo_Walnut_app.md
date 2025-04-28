@@ -385,6 +385,7 @@ node_modules
 dist
 ```
 Lưu và thoát.
+
 ### Cấu hình * .env *:
 Mở ``` cli/.env ```:
 ```bash
@@ -400,6 +401,7 @@ CONTRACT_ADDRESS=<contract-address>
 ```
 Thay các giá trị bằng khóa riêng và địa chỉ hợp đồng thực tế.
 Lưu và thoát.
+
 ### Cấu hình package.json:
 Mở ``` cli/package.json ```:
 ```bash
@@ -428,7 +430,8 @@ Thay bằng:
 }
 ```
 Lưu và thoát.
-Cài dependencies
+
+### Cài dependencies
 ```
 npm install
 ```
