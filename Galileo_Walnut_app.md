@@ -278,6 +278,12 @@ contract Walnut {
 }
 ```
 Lưu và thoát.
+Sửa nội dung trong ``` contracts/Lock.sol ```
+```bash
+nano contracts/Lock.sol
+```
+Sửa nội dung sau: ``` pragma solidity ^0.8.28;  ``` thành ``` pragma solidity ^0.8.20;  ```
+Lưu và thoát.
 ### Biên dịch hợp đồng:
 ```bash
 npx hardhat compile
