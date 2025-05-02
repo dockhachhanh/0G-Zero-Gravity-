@@ -121,3 +121,8 @@ journalctl -u geth -f
 ---
 Chúc các bạn thành công.
 Link tham khảo: https://service.josephtran.xyz/testnet/zero-gravity-0g/validator-node/installation
+---
+## Lấy node id
+```bash
+~/galileo/bin/0gchaind tendermint show-node-id --home $HOME/.0gchain/0g-home/0gchaind-home
+```
