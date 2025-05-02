@@ -107,9 +107,16 @@ sudo systemctl start geth
 sudo systemctl status 0gd
 sudo systemctl status geth
 ```
-## Check log
+## Check log  + 📌 Ghi chú:
+- Đảm bảo bạn đã mở các cổng sau trên tường lửa (nếu có):
+   - 26656, 26657 cho 0gchaind
+   - 30303 cho geth
+- Địa chỉ IP node của bạn là: $(wget -qO- eth0.me)
+- Nếu cần xem log node:
+
 ```bash
-sudo journalctl -fu 0gd geth
+journalctl -u 0gd -f
+journalctl -u geth -f
 ```
 ---
 Chúc các bạn thành công.
