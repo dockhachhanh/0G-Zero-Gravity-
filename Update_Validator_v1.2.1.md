@@ -86,7 +86,8 @@ sed -i 's/beacon-kit/chaincfg/g' $CL_HOME/config/app.toml
 
 # Run rollback script
 cd ~/galileo
-sh ./rollback_cl.sh $CL_HOME 127.0.0.1:8545
+sh ./rollback_cl.sh $CL_HOME 127.0.0.1:26545
+# 26545 change to rpc port of your validator rpc ( default 8545 )
 ```
 ```bash
 sudo systemctl stop geth
