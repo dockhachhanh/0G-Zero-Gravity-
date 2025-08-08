@@ -40,12 +40,7 @@ rsync -a $GETH_DATADIR/ $BACKUP_DIR/geth-backup/
 # Backup Consensus Layer data
 rsync -a $CL_HOME/ $BACKUP_DIR/cl-backup/
 ```
-### Step 6: Replace the galileo Folder
-```bash
-mv galileo galileo-backup-$(date +%Y%m%d-%H%M%S)
-mv galileo-v1.2.1 galileo
-```
-### Step 7: Create or Update geth.service
+### Step 6: Create or Update geth.service
 ```bash
 sudo rm -f /etc/systemd/system/geth.service /etc/systemd/system/0gchaind.service
 ```
@@ -84,7 +79,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl start geth
 ```
-### Step 8: Run Consensus Layer Rollback
+### Step 7: Run Consensus Layer Rollback
 ```bash
 # Replace all "beacon-kit" with "chaincfg" in app.toml
 sed -i 's/beacon-kit/chaincfg/g' $CL_HOME/config/app.toml
@@ -97,7 +92,7 @@ sh ./rollback_cl.sh $CL_HOME 127.0.0.1:26545
 ```bash
 sudo systemctl stop geth
 ```
-### Step 9: Reset Validator State
+### Step 8: Reset Validator State
 ```bash
 # Backup the current validator state
 cp $CL_HOME/data/priv_validator_state.json \
@@ -119,7 +114,7 @@ EOF
 chown $USER:$USER $CL_HOME/data/priv_validator_state.json
 chmod 644 $CL_HOME/data/priv_validator_state.json
 ```
-### Step 10: Create or Update 0gchaind.service
+### Step 9: Create or Update 0gchaind.service
 ```bash
 sudo tee /etc/systemd/system/0gchaind.service > /dev/null <<EOF
 [Unit]
@@ -153,13 +148,13 @@ WantedBy=multi-user.target
 EOF
 
 ```
-### Step 11: Start Services
+### Step 10: Start Services
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now geth 0gchaind
 
 ```
-### Step 12: Verify Services
+### Step 11: Verify Services
 ```bash
 # Kiểm tra trạng thái
 sudo systemctl status geth --no-pager -l
