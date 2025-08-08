@@ -4,71 +4,74 @@ Go to: https://0g-labs.notion.site/0G-Validator-Node-Upgrade-Guide-v1-2-1-Releas
 Download galileo-v1.2.1.zip and transfer to VPS
 ---
 ## Upgrade Steps
-### Step 1: Extract New Release
+### Step 1: Extract the New Release
 ```bash
 unzip -o galileo-v1.2.1.zip
 ```
-### Step 2: Stop Services
+### Step 2: Stop existing Services
 ```bash
 sudo systemctl stop geth 0gchaind
 ```
-### replace geth and 0gchaind binary
+### Step 3: Replace geth and 0gchaind Binaries
 ```bash
 sudo chmod +x ~/galileo/bin/geth
 sudo chmod +x ~/galileo/bin/0gchaind
 sudo cp -f ~/galileo/bin/geth /usr/local/bin/geth
 sudo cp -f ~/galileo/bin/0gchaind /usr/local/bin/0gchaind
 ```
-### Step 3: Backup Your Data
+### Step 4: Backup Your Data
 ```bash
 # Create backup directory with timestamp
-BACKUP_DIR="backup-v120-$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="backup-v121-$(date +%Y%m%d-%H%M%S)"
 mkdir -p $BACKUP_DIR
-export your_geth_datadir=~/.0gchaind/galileo/0g-home/geth-home
-export your_cl_home=~/.0gchaind/galileo/0g-home/0gchaind-home
 
-# Backup execution layer data(geth-home)
-rsync -a $your_geth_datadir/ $BACKUP_DIR/geth-backup/
+# Define data paths
+export GETH_DATADIR=$HOME/.0gchaind/galileo/0g-home/geth-home
+export CL_HOME=$HOME/.0gchaind/galileo/0g-home/0gchaind-home
 
-# Backup consensus layer data (0gchaind-home)
-rsync -a $your_cl_home/ $BACKUP_DIR/cl-backup/
+# Backup Execution Layer data
+rsync -a $GETH_DATADIR/ $BACKUP_DIR/geth-backup/
+
+# Backup Consensus Layer data
+rsync -a $CL_HOME/ $BACKUP_DIR/cl-backup/
 ```
+### Step 5: Replace the galileo Folder
 ```bash
 mv galileo galileo-backup-$(date +%Y%m%d-%H%M%S)
 mv galileo-v1.2.1 galileo
 ```
-### Step 4: Run Consensus Layer Rollback
+### Step 6: Run Consensus Layer Rollback
 ```bash
 # Replace all "beacon-kit" with "chaincfg" in app.toml
-sed -i 's/beacon-kit/chaincfg/g' $your_cl_home/config/app.toml
+sed -i 's/beacon-kit/chaincfg/g' $CL_HOME/config/app.toml
 
-# Then retry the rollback script
+# Run rollback script
 cd ~/galileo
-sh ./rollback_cl.sh $your_cl_home 127.0.0.1:8545
+sh ./rollback_cl.sh $CL_HOME 127.0.0.1:8545
 ```
-### Step 5: Remove Validator State File
+### Step 7: Reset Validator State
 ```bash
-# Backup the current validator state (optional but recommended)
-cp $your_cl_home/data/priv_validator_state.json \
-   $your_cl_home/data/priv_validator_state.json.backup-$(date +%Y%m%d-%H%M%S)
+# Backup the current validator state
+cp $CL_HOME/data/priv_validator_state.json \
+   $CL_HOME/data/priv_validator_state.json.backup-$(date +%Y%m%d-%H%M%S)
 
-# Remove the state file (will be regenerated)
-rm $your_cl_home/data/priv_validator_state.json
-```
-```bash
-cat > $HOME/.0gchaind/galileo/0g-home/0gchaind-home/data/priv_validator_state.json <<EOF
+# Remove the old state file
+rm -f $CL_HOME/data/priv_validator_state.json
+
+# Create a fresh state file
+cat > $CL_HOME/data/priv_validator_state.json <<EOF
 {
   "height": "0",
   "round": 0,
   "step": 0
 }
 EOF
+
+# Set ownership and permissions
+chown $USER:$USER $CL_HOME/data/priv_validator_state.json
+chmod 644 $CL_HOME/data/priv_validator_state.json
 ```
-```bash
-chown $USER:$USER $HOME/.0gchaind/galileo/0g-home/0gchaind-home/data/priv_validator_state.json
-```
-### geth.service
-### 0gchaind.service
+### Step 8: Create or Update geth.service
 ```bash
 sudo rm -f /etc/systemd/system/geth.service /etc/systemd/system/0gchaind.service
 ```
@@ -77,8 +80,7 @@ USER_NAME=$(whoami)
 HOME_DIR=$(eval echo ~$USER_NAME)
 PUBLIC_IP=$(curl -s ifconfig.me)
 
-# Tạo geth.service
-cat <<EOF | sudo tee /etc/systemd/system/geth.service
+sudo tee /etc/systemd/system/geth.service > /dev/null <<EOF
 [Unit]
 Description=0g Geth Node Service (Galileo v1.2.1)
 After=network-online.target
@@ -104,8 +106,10 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 
-# Tạo 0gchaind.service
-cat <<EOF | sudo tee /etc/systemd/system/0gchaind.service
+```
+### Step 9: Create or Update 0gchaind.service
+```bash
+sudo tee /etc/systemd/system/0gchaind.service > /dev/null <<EOF
 [Unit]
 Description=0gchaind Node Service (Galileo v1.2.1)
 After=network-online.target
@@ -135,15 +139,15 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+
 ```
-### Start service
+### Step 10: Start Services
 ```bash
-# Reload & khởi động dịch vụ
 sudo systemctl daemon-reload
-sudo systemctl enable geth 0gchaind
-sudo systemctl start geth 0gchaind
+sudo systemctl enable --now geth 0gchaind
+
 ```
-### Check logs
+### Step 11: Verify Services
 ```bash
 # Kiểm tra trạng thái
 sudo systemctl status geth --no-pager -l
