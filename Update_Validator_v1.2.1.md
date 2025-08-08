@@ -40,38 +40,7 @@ rsync -a $CL_HOME/ $BACKUP_DIR/cl-backup/
 mv galileo galileo-backup-$(date +%Y%m%d-%H%M%S)
 mv galileo-v1.2.1 galileo
 ```
-### Step 6: Run Consensus Layer Rollback
-```bash
-# Replace all "beacon-kit" with "chaincfg" in app.toml
-sed -i 's/beacon-kit/chaincfg/g' $CL_HOME/config/app.toml
-
-# Run rollback script
-cd ~/galileo
-sh ./rollback_cl.sh $CL_HOME 127.0.0.1:8545
-```
-### Step 7: Reset Validator State
-```bash
-# Backup the current validator state
-cp $CL_HOME/data/priv_validator_state.json \
-   $CL_HOME/data/priv_validator_state.json.backup-$(date +%Y%m%d-%H%M%S)
-
-# Remove the old state file
-rm -f $CL_HOME/data/priv_validator_state.json
-
-# Create a fresh state file
-cat > $CL_HOME/data/priv_validator_state.json <<EOF
-{
-  "height": "0",
-  "round": 0,
-  "step": 0
-}
-EOF
-
-# Set ownership and permissions
-chown $USER:$USER $CL_HOME/data/priv_validator_state.json
-chmod 644 $CL_HOME/data/priv_validator_state.json
-```
-### Step 8: Create or Update geth.service
+### Step 6: Create or Update geth.service
 ```bash
 sudo rm -f /etc/systemd/system/geth.service /etc/systemd/system/0gchaind.service
 ```
@@ -105,7 +74,44 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start geth
+```
+### Step 7: Run Consensus Layer Rollback
+```bash
+# Replace all "beacon-kit" with "chaincfg" in app.toml
+sed -i 's/beacon-kit/chaincfg/g' $CL_HOME/config/app.toml
 
+# Run rollback script
+cd ~/galileo
+sh ./rollback_cl.sh $CL_HOME 127.0.0.1:8545
+```
+```bash
+sudo systemctl stop geth
+```
+### Step 8: Reset Validator State
+```bash
+# Backup the current validator state
+cp $CL_HOME/data/priv_validator_state.json \
+   $CL_HOME/data/priv_validator_state.json.backup-$(date +%Y%m%d-%H%M%S)
+
+# Remove the old state file
+rm -f $CL_HOME/data/priv_validator_state.json
+
+# Create a fresh state file
+cat > $CL_HOME/data/priv_validator_state.json <<EOF
+{
+  "height": "0",
+  "round": 0,
+  "step": 0
+}
+EOF
+
+# Set ownership and permissions
+chown $USER:$USER $CL_HOME/data/priv_validator_state.json
+chmod 644 $CL_HOME/data/priv_validator_state.json
 ```
 ### Step 9: Create or Update 0gchaind.service
 ```bash
